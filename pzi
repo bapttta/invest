@@ -1,0 +1,125 @@
+import { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import { Input } from "@/components/ui/input";
+import { Copy, TrendingUp, Shield, Users, DollarSign, BarChart2, MessageSquare, Bell, Settings, Facebook } from "lucide-react";
+import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+
+export default function Dashboard() {
+  const [investment, setInvestment] = useState(500);
+  const [progress, setProgress] = useState(75);
+  const referralLink = "https://fakeponzi.com/invite/user123";
+  const [totalUsers, setTotalUsers] = useState(15000);
+  const [timeLeft, setTimeLeft] = useState("4 mois et 12 jours");
+  const [totalFunds, setTotalFunds] = useState((totalUsers * 500).toLocaleString());
+  const [chatMessages, setChatMessages] = useState([
+    { sender: "Bot", text: "Bienvenue sur le support, comment puis-je vous aider ?" }
+  ]);
+  
+  const earningsData = [
+    { month: "Jan", earnings: 200 },
+    { month: "Fév", earnings: 300 },
+    { month: "Mar", earnings: 400 },
+    { month: "Avr", earnings: 600 },
+    { month: "Mai", earnings: 800 },
+    { month: "Juin", earnings: 1000 }
+  ];
+
+  return (
+    <div className="p-6 max-w-6xl mx-auto space-y-6 bg-white">
+      <h1 className="text-4xl font-semibold text-center text-gray-800 mb-8">Tableau de Bord</h1>
+
+      {/* Barre de navigation */}
+      <div className="flex justify-between items-center bg-red-600 text-white p-4 rounded-lg mb-6">
+        <div className="text-lg">FakePonzi</div>
+        <div className="space-x-6">
+          <Button variant="outline" className="text-white">Accueil</Button>
+          <Button variant="outline" className="text-white">Mon Compte</Button>
+          <Button variant="outline" className="text-white">Investir</Button>
+          <Button variant="outline" className="text-white">Retraits</Button>
+          <Button variant="outline" className="text-white">FAQ</Button>
+        </div>
+      </div>
+
+      {/* Solde actuel */}
+      <Card className="p-6 shadow-lg text-center bg-gray-50">
+        <h2 className="text-2xl font-semibold flex items-center justify-center mb-2 text-red-600">
+          <TrendingUp className="mr-2" /> Solde Actuel
+        </h2>
+        <p className="text-4xl font-bold text-green-500">{investment} €</p>
+        <p className="text-lg text-gray-500">+{(investment * 0.2).toFixed(2)} € de gains ce mois-ci</p>
+        <p className="text-sm text-gray-400 mt-2">Retrait possible après {timeLeft}</p>
+      </Card>
+
+      {/* Simulation d'Investissement */}
+      <Card className="p-6 text-center bg-gray-50">
+        <h2 className="text-2xl font-semibold">Simulation d'Investissement</h2>
+        <Input 
+          type="number" 
+          placeholder="Montant à investir (€)" 
+          className="my-2 border rounded-md p-2" 
+          onChange={(e) => setInvestment(Number(e.target.value))} 
+        />
+        <Button className="mt-2">Calculer les gains potentiels</Button>
+      </Card>
+
+      {/* Graphique des Gains */}
+      <Card className="p-6 bg-gray-50">
+        <h2 className="text-2xl font-semibold flex items-center mb-2">
+          <BarChart2 className="mr-2" /> Graphique des Gains
+        </h2>
+        <ResponsiveContainer width="100%" height={300}>
+          <LineChart data={earningsData}>
+            <XAxis dataKey="month" />
+            <YAxis />
+            <Tooltip />
+            <Line type="monotone" dataKey="earnings" stroke="#4CAF50" strokeWidth={3} />
+          </LineChart>
+        </ResponsiveContainer>
+      </Card>
+
+      {/* Support Client */}
+      <Card className="p-6 bg-gray-50">
+        <h2 className="text-2xl font-semibold flex items-center mb-2">
+          <MessageSquare className="mr-2" /> Support Client
+        </h2>
+        <div className="border p-3 h-48 overflow-y-auto bg-gray-100 rounded">
+          {chatMessages.map((msg, index) => (
+            <p key={index} className={msg.sender === "Bot" ? "text-blue-500" : "text-gray-800"}>
+              <strong>{msg.sender}:</strong> {msg.text}
+            </p>
+          ))}
+        </div>
+        <Input placeholder="Écrivez un message..." className="mt-2" />
+      </Card>
+
+      {/* Notifications */}
+      <Card className="p-6 bg-gray-50">
+        <h2 className="text-2xl font-semibold flex items-center mb-2">
+          <Bell className="mr-2" /> Notifications
+        </h2>
+        <p className="text-gray-500">Nouvelle offre : +20% sur votre prochain dépôt !</p>
+      </Card>
+
+      {/* Paramètres */}
+      <Card className="p-6 bg-gray-50">
+        <h2 className="text-2xl font-semibold flex items-center mb-2">
+          <Settings className="mr-2" /> Paramètres
+        </h2>
+        <Button variant="outline">Modifier les préférences</Button>
+      </Card>
+
+      {/* Inscription via Réseaux Sociaux */}
+      <Card className="p-6 bg-gray-50">
+        <h2 className="text-2xl font-semibold flex items-center mb-2">
+          <Users className="mr-2" /> Inscrivez-vous avec vos réseaux sociaux
+        </h2>
+        <div className="flex space-x-4">
+          <Button variant="outline" className="text-blue-500"><Facebook /> Facebook</Button>
+        </div>
+      </Card>
+
+    </div>
+  );
+}
